@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Password Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .generator-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 350px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    input[type="number"] {
+      width: 50px;
+      padding: 5px;
+      margin-left: 10px;
+    }
+    label {
+      display: block;
+      margin: 10px 0;
+      text-align: left;
+    }
+    #password {
+      font-size: 18px;
+      margin: 15px 0;
+      word-break: break-all;
+      padding: 10px;
+      background: #f4f4f4;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 10px 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="generator-container">
+    <h2>Password Generator</h2>
+    <label>
+      Length:
+      <input type="number" id="length" min="4" max="32" value="12">
+    </label>
+    <label><input type="checkbox" id="uppercase" checked> Include Uppercase</label>
+    <label><input type="checkbox" id="lowercase" checked> Include Lowercase</label>
+    <label><input type="checkbox" id="numbers" checked> Include Numbers</label>
+    <label><input type="checkbox" id="symbols" checked> Include Symbols</label>
+    <div id="password">Your password will appear here</div>
+    <button onclick="generatePassword()">Generate</button>
+    <button onclick="copyToClipboard()">Copy</button>
+  </div>
+
+  <script>
+    function generatePassword() {
+      const length = document.getElementById('length').value;
+      const useUpper = document.getElementById('uppercase').checked;
+      const useLower = document.getElementById('lowercase').checked;
+      const useNumbers = document.getElementById('numbers').checked;
+      const useSymbols = document.getElementById('symbols').checked;
+
+      const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const lower = "abcdefghijklmnopqrstuvwxyz";
+      const numbers = "0123456789";
+      const symbols = "!@#$%^&*()_+{}[]|:;<>,.?/~`-=";
+
+      let allChars = "";
+      if (useUpper) allChars += upper;
+      if (useLower) allChars += lower;
+      if (useNumbers) allChars += numbers;
+      if (useSymbols) allChars += symbols;
+
+      if (allChars === "") {
+        document.getElementById("password").textContent = "Please select at least one option.";
+        return;
+      }
+
+      let password = "";
+      for (let i = 0; i < length; i++) {
+        const index = Math.floor(Math.random() * allChars.length);
+        password += allChars[index];
+      }
+
+      document.getElementById("password").textContent = password;
+    }
+
+    function copyToClipboard() {
+      const password = document.getElementById("password").textContent;
+      if (!password || password === "Your password will appear here") return;
+
+      navigator.clipboard.writeText(password).then(() => {
+        alert("Password copied to clipboard!");
+      });
+    }
+  </script>
+</body>
+</html>
